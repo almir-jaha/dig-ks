@@ -106,7 +106,7 @@ function sendMessage() {
 
 function submitData() {
   showTyping();
-  fetch('http://localhost:3000/submit-form', {
+  fetch('/submit-form',, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
