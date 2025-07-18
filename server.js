@@ -8,7 +8,6 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -83,10 +82,6 @@ app.post('/submit-form', async (req, res) => {
   }
 });
 
-  Fallback za root path (prikazuje index.html)
-  app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-  });
 
 app.listen(PORT, () => {
   console.log(`✅ Server je aktivan na http://localhost:${PORT}`);
