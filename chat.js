@@ -214,8 +214,6 @@ async function saveAsPDF() {
   doc.save(`chat-${timestamp}.pdf`);
 }
 
-
-
 // Početna poruka
 // askNextStep();
 loadFromStorage();

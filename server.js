@@ -1,12 +1,33 @@
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
+const nodemailer = require('nodemailer');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+//app.use(express.static(path.join(__dirname, 'public')));
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'almir.jaha@gmail.com',
+    pass: 'uqgq vsro rvxf lgox'  // ne obična lozinka
+  }
+});
+
+// Funkcija za slanje emaila
+function posaljiEmail(ime, email, pitanje) {
+  const mailOptions = {
+    from: 'tvoj.email@gmail.com',
+    to: 'tvoj.email@gmail.com', // promeni ako želiš drugi prijemnik
+    subject: '📝 Novi upit sa chat agenta',
+    text: `Ime: ${ime}\nEmail: ${email}\nPitanje: ${pitanje}`
+  };
+  return transporter.sendMail(mailOptions);
+}
 
 // 📌 API za geolokaciju na osnovu IP
 const getLocationFromIP = async (ip) => {
@@ -45,6 +66,8 @@ app.post('/submit-form', async (req, res) => {
   try {
     const apiResponse = await axios.post(url);
 
+    await posaljiEmail(ime, email, pitanje);
+
     res.json({
       status: 'success',
       message: 'Podaci su uspešno prosleđeni sa lokacijom!',
@@ -59,6 +82,11 @@ app.post('/submit-form', async (req, res) => {
     });
   }
 });
+
+//  Fallback za root path (prikazuje index.html)
+//  app.get('/', (req, res) => {
+//  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+//  });
 
 app.listen(PORT, () => {
   console.log(`✅ Server je aktivan na http://localhost:${PORT}`);
